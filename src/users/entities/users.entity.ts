@@ -1,4 +1,10 @@
-import { Column, Entity, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import {
+  Column,
+  Entity,
+  PrimaryGeneratedColumn,
+  OneToMany,
+  CreateDateColumn,
+} from 'typeorm';
 import { Post } from '../../posts/entities';
 
 @Entity('users')
@@ -8,6 +14,12 @@ export class User {
 
   @Column()
   name: string;
+
+  @Column()
+  role: string;
+
+  @CreateDateColumn()
+  createdAt: Date;
 
   @Column()
   email: string;
