@@ -6,11 +6,12 @@ import {
   CreateDateColumn,
 } from 'typeorm';
 import { User } from '../../users/entities';
+import { type uuid } from '../../util/types/uuid';
 
 @Entity('posts')
 export class Post {
   @PrimaryGeneratedColumn('uuid')
-  id: number;
+  id: uuid;
 
   @Column('text')
   title: string;

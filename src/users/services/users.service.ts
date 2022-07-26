@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../entities';
 import { Repository } from 'typeorm';
 import { NewUserInput } from '../DTO/new-user.input';
+import { type uuid } from '../../util/types/uuid';
 
 @Injectable()
 export class UsersService {
@@ -17,7 +18,7 @@ export class UsersService {
     });
   }
 
-  async getUserById(id: number): Promise<User> {
+  async getUserById(id: uuid): Promise<User> {
     return await this.usersRepository.findOne({
       where: { id },
     });
