@@ -1,17 +1,26 @@
-import { Column, Entity, PrimaryGeneratedColumn, OneToOne } from 'typeorm';
+import {
+  Column,
+  Entity,
+  PrimaryGeneratedColumn,
+  OneToOne,
+  CreateDateColumn,
+} from 'typeorm';
 import { User } from '../../users/entities';
 
 @Entity('posts')
 export class Post {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('uuid')
   id: number;
 
-  @Column()
+  @Column('text')
   title: string;
 
-  @Column()
+  @Column('text')
   content: string;
 
-  @OneToOne((type) => User, (user) => user.posts)
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @OneToOne(() => User, (user) => user.posts)
   user: User;
 }

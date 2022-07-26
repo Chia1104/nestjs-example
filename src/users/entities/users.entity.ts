@@ -9,24 +9,24 @@ import { Post } from '../../posts/entities';
 
 @Entity('users')
 export class User {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('uuid')
   id: number;
 
-  @Column()
+  @Column('text')
   name: string;
 
-  @Column()
+  @Column('text')
   role: string;
 
   @CreateDateColumn()
   createdAt: Date;
 
-  @Column()
+  @Column('text', { unique: true })
   email: string;
 
-  @Column()
+  @Column('text', { unique: true })
   password: string;
 
-  @OneToMany((type) => Post, (post) => post.user)
+  @OneToMany(() => Post, (post) => post.user)
   posts: Post[];
 }
