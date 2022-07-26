@@ -7,8 +7,6 @@ import {
   Body,
   Request,
   NotFoundException,
-  UnauthorizedException,
-  ForbiddenException,
 } from '@nestjs/common';
 import { PostsService } from '../services';
 import { JwtAuthGuard } from '../../auth/guards';
@@ -61,6 +59,6 @@ export class PostsController {
   async createPost(@Body() newPost: NewPostInput, @Request() req) {
     const user = await req.user;
     const _newPost = { ...newPost, user };
-    return await this.postsService.createPost(newPost);
+    return await this.postsService.createPost(_newPost);
   }
 }

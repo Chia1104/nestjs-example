@@ -4,9 +4,11 @@ import {
   PrimaryGeneratedColumn,
   OneToOne,
   CreateDateColumn,
+  JoinColumn,
 } from 'typeorm';
 import { User } from '../../users/entities';
 import { type uuid } from '../../util/types/uuid';
+import { type UserCreatePost } from '../../util/types/user-create-post';
 
 @Entity('posts')
 export class Post {
@@ -23,5 +25,6 @@ export class Post {
   createdAt: Date;
 
   @OneToOne(() => User, (user) => user.posts)
-  user: User;
+  @JoinColumn()
+  user: UserCreatePost;
 }
