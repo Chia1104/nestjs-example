@@ -13,16 +13,29 @@ export class PostsService {
   ) {}
 
   async getPostById(id: uuid): Promise<Post> {
-    return await this.postsRepository.findOne({
-      where: { id },
-    });
+    return await this.postsRepository
+      .createQueryBuilder('post')
+      .leftJoinAndSelect('post.user', 'user')
+      .where('post.id = :id', { id })
+      .getOne();
   }
 
   async getAllPosts(): Promise<Post[]> {
-    return await this.postsRepository.find();
+    return await this.postsRepository
+      .createQueryBuilder('post')
+      .leftJoinAndSelect('post.user', 'user')
+      .getMany();
   }
 
   async createPost(newPost: NewPostInput): Promise<Post> {
     return this.postsRepository.save(newPost);
+  }
+
+  async updatePost(id: uuid, newPost: NewPostInput): Promise<Post> {
+    return this.postsRepository.save({ id, ...newPost });
+  }
+
+  async deletePost(id: uuid): Promise<void> {
+    await this.postsRepository.delete(id);
   }
 }

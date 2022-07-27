@@ -6,6 +6,8 @@ import {
   Param,
   Body,
   Request,
+  Delete,
+  Put,
   NotFoundException,
 } from '@nestjs/common';
 import { PostsService } from '../services';
@@ -60,5 +62,37 @@ export class PostsController {
     const user = await req.user;
     const _newPost = { ...newPost, user };
     return await this.postsService.createPost(_newPost);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Put('/:id')
+  @ApiOperation({ summary: 'Update post' })
+  @ApiResponse({ status: 200, description: 'Update post' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiParam({ name: 'id', description: 'Post id' })
+  @ApiBearerAuth()
+  async updatePost(
+    @Param('id') id: uuid,
+    @Body() newPost: NewPostInput,
+    @Request() req,
+  ) {
+    if (!uuidSchema.safeParse(id).success) throw new NotFoundException();
+    const user = await req.user;
+    const _newPost = { ...newPost, user };
+    return await this.postsService.updatePost(id, _newPost);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Delete('/:id')
+  @ApiOperation({ summary: 'Delete post' })
+  @ApiResponse({ status: 200, description: 'Delete post' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiParam({ name: 'id', description: 'Post id' })
+  @ApiBearerAuth()
+  async deletePost(@Param('id') id: uuid) {
+    if (!uuidSchema.safeParse(id).success) throw new NotFoundException();
+    return await this.postsService.deletePost(id);
   }
 }

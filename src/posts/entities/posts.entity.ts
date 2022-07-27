@@ -2,13 +2,11 @@ import {
   Column,
   Entity,
   PrimaryGeneratedColumn,
-  OneToOne,
+  ManyToOne,
   CreateDateColumn,
-  JoinColumn,
 } from 'typeorm';
 import { User } from '../../users/entities';
 import { type uuid } from '../../util/types/uuid';
-import { type UserCreatePost } from '../../util/types/user-create-post';
 
 @Entity('posts')
 export class Post {
@@ -24,7 +22,6 @@ export class Post {
   @CreateDateColumn()
   createdAt: Date;
 
-  @OneToOne(() => User, (user) => user.posts)
-  @JoinColumn()
-  user: UserCreatePost;
+  @ManyToOne(() => User, (user) => user.posts)
+  user: User;
 }

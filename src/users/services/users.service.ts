@@ -12,19 +12,31 @@ export class UsersService {
     private readonly usersRepository: Repository<User>,
   ) {}
 
+  // Only for login or register
   async getUserByEmail(email: string): Promise<User> {
-    return await this.usersRepository.findOne({
-      where: { email },
-    });
+    return await this.usersRepository
+      .createQueryBuilder('user')
+      .where('user.email = :email', { email })
+      .addSelect('user.password')
+      .getOne();
   }
 
   async getUserById(id: uuid): Promise<User> {
-    return await this.usersRepository.findOne({
-      where: { id },
-    });
+    return await this.usersRepository
+      .createQueryBuilder('user')
+      .leftJoinAndSelect('user.posts', 'posts')
+      .where('user.id = :id', { id })
+      .getOne();
   }
 
   async createUser(newUser: NewUserInput): Promise<User> {
     return this.usersRepository.save(newUser);
+  }
+
+  async getAllUsers(): Promise<User[]> {
+    return await this.usersRepository
+      .createQueryBuilder('user')
+      .leftJoinAndSelect('user.posts', 'posts')
+      .getMany();
   }
 }
