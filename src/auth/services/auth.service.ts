@@ -47,7 +47,12 @@ export class AuthService {
     const user = await this.validateUser(email, password);
     if (user) {
       const { password, ...result } = user;
-      const payload = { id: user.id, name: user.name, email: user.email };
+      const payload = {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      };
       return {
         ...result,
         accessToken: this.jwtService.sign(payload),
@@ -71,7 +76,12 @@ export class AuthService {
       return null;
     }
     const { password, ...result } = user;
-    const payload = { id: user.id, name: user.name, email: user.email };
+    const payload = {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+    };
     return {
       ...result,
       accessToken: this.jwtService.sign(payload),
