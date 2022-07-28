@@ -1,6 +1,6 @@
 import { Length, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { type UserCreatePost } from '../../util/types/user-create-post';
+import { type UserCreatePost } from '../../../util/types/user-create-post';
 
 export class NewPostInput {
   @Length(1, 50)

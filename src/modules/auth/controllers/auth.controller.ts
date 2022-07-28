@@ -1,27 +1,27 @@
 import {
+  Body,
   Controller,
-  Post,
   Get,
-  UseGuards,
+  Post,
   Query,
   Request,
-  Body,
   UnauthorizedException,
+  UseGuards,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
 import { AuthService } from '../services';
-import { JwtAuthGuard } from '../guards';
+import { JwtAuthGuard } from '../../../guards/jwt-auth';
 import {
+  ApiBearerAuth,
   ApiOperation,
+  ApiQuery,
   ApiResponse,
   ApiTags,
-  ApiQuery,
-  ApiBearerAuth,
 } from '@nestjs/swagger';
 import { NewUserInput } from '../DTO/new-user.input';
-import { CheckEmailPipe } from '../../pipes/check-email';
-import { CheckPasswordPipe } from '../../pipes/check-password';
+import { CheckEmailPipe } from '../../../pipes/check-email';
+import { CheckPasswordPipe } from '../../../pipes/check-password';
 
 @Controller('auth')
 @ApiTags('Auth')

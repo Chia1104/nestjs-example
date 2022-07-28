@@ -3,7 +3,6 @@ import { JwtService } from '@nestjs/jwt';
 import { UsersService } from '../../users/services';
 import { HashService } from '../../hash/services';
 import { NewUserInput } from '../DTO/new-user.input';
-import { z } from 'zod';
 
 @Injectable()
 export class AuthService {
@@ -13,7 +12,7 @@ export class AuthService {
     private readonly hashService: HashService,
   ) {}
 
-  private async validateUser(email: string, password: string): Promise<any> {
+  async validateUser(email: string, password: string): Promise<any> {
     const user = await this.usersService.getUserByEmail(email);
     if (user && (await this.hashService.compare(password, user.password))) {
       const { password, ...result } = user;

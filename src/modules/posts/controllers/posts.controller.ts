@@ -14,7 +14,7 @@ import {
   ParseUUIDPipe,
 } from '@nestjs/common';
 import { PostsService } from '../services';
-import { JwtAuthGuard } from '../../auth/guards';
+import { JwtAuthGuard } from '../../../guards/jwt-auth';
 import {
   ApiOperation,
   ApiResponse,
@@ -22,7 +22,7 @@ import {
   ApiParam,
   ApiBearerAuth,
 } from '@nestjs/swagger';
-import { type uuid } from '../../util/types/uuid';
+import { type uuid } from '../../../util/types/uuid';
 import { NewPostInput } from '../DTO/new-post.input';
 
 @Controller('posts')

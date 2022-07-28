@@ -6,7 +6,7 @@ import {
   CreateDateColumn,
 } from 'typeorm';
 import { User } from '../../users/entities';
-import { type uuid } from '../../util/types/uuid';
+import { type uuid } from '../../../util/types/uuid';
 
 @Entity('posts')
 export class Post {

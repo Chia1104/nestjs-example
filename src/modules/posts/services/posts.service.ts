@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Post } from '../entities';
 import { Repository } from 'typeorm';
 import { NewPostInput } from '../DTO/new-post.input';
-import { type uuid } from '../../util/types/uuid';
+import { type uuid } from '../../../util/types/uuid';
 
 @Injectable()
 export class PostsService {
