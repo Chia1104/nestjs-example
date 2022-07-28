@@ -28,6 +28,6 @@ export class User {
   @Column('text', { unique: true, select: false })
   password: string;
 
-  @OneToMany(() => Post, (post) => post.user, { cascade: true })
+  @OneToMany(() => Post, (post) => post.user)
   posts: Post[];
 }

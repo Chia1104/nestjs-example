@@ -1,7 +1,6 @@
 import {
   Controller,
   Get,
-  Param,
   NotFoundException,
   UseGuards,
 } from '@nestjs/common';
@@ -10,7 +9,6 @@ import {
   ApiOperation,
   ApiResponse,
   ApiTags,
-  ApiParam,
   ApiBearerAuth,
 } from '@nestjs/swagger';
 import { UsersService } from '../services';

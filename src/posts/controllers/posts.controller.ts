@@ -9,6 +9,9 @@ import {
   Delete,
   Put,
   NotFoundException,
+  UsePipes,
+  ValidationPipe,
+  ParseUUIDPipe,
 } from '@nestjs/common';
 import { PostsService } from '../services';
 import { JwtAuthGuard } from '../../auth/guards';
@@ -19,7 +22,7 @@ import {
   ApiParam,
   ApiBearerAuth,
 } from '@nestjs/swagger';
-import { type uuid, uuidSchema } from '../../util/types/uuid';
+import { type uuid } from '../../util/types/uuid';
 import { NewPostInput } from '../DTO/new-post.input';
 
 @Controller('posts')
@@ -44,8 +47,15 @@ export class PostsController {
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 404, description: 'NotFound' })
   @ApiParam({ name: 'id', description: 'Post id' })
-  async getPostById(@Param('id') id: uuid) {
-    if (!uuidSchema.safeParse(id).success) throw new NotFoundException();
+  async getPostById(
+    @Param(
+      'id',
+      new ParseUUIDPipe({
+        exceptionFactory: () => new NotFoundException(),
+      }),
+    )
+    id: uuid,
+  ) {
     const post = await this.postsService.getPostById(id);
     if (!post) throw new NotFoundException();
     return post;
@@ -58,6 +68,7 @@ export class PostsController {
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiBearerAuth()
+  @UsePipes(ValidationPipe)
   async createPost(@Body() newPost: NewPostInput, @Request() req) {
     const user = await req.user;
     const _newPost = { ...newPost, user };
@@ -72,12 +83,18 @@ export class PostsController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiParam({ name: 'id', description: 'Post id' })
   @ApiBearerAuth()
+  @UsePipes(ValidationPipe)
   async updatePost(
-    @Param('id') id: uuid,
+    @Param(
+      'id',
+      new ParseUUIDPipe({
+        exceptionFactory: () => new NotFoundException(),
+      }),
+    )
+    id: uuid,
     @Body() newPost: NewPostInput,
     @Request() req,
   ) {
-    if (!uuidSchema.safeParse(id).success) throw new NotFoundException();
     const user = await req.user;
     const _newPost = { ...newPost, user };
     return await this.postsService.updatePost(id, _newPost);
@@ -91,8 +108,15 @@ export class PostsController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiParam({ name: 'id', description: 'Post id' })
   @ApiBearerAuth()
-  async deletePost(@Param('id') id: uuid) {
-    if (!uuidSchema.safeParse(id).success) throw new NotFoundException();
+  async deletePost(
+    @Param(
+      'id',
+      new ParseUUIDPipe({
+        exceptionFactory: () => new NotFoundException(),
+      }),
+    )
+    id: uuid,
+  ) {
     return await this.postsService.deletePost(id);
   }
 }

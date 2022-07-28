@@ -22,28 +22,7 @@ export class AuthService {
     return null;
   }
 
-  private async checkLogin(email: string, password: string): Promise<boolean> {
-    const loginSchema = z.object({
-      email: z.string().email(),
-      password: z.string().min(6).max(20),
-    });
-    return loginSchema.safeParse({ email, password }).success;
-  }
-
-  private async checkRegister(newUser: NewUserInput): Promise<boolean> {
-    const registerSchema = z.object({
-      name: z.string().min(3).max(20),
-      email: z.string().email(),
-      role: z.enum(['user', 'admin']),
-      password: z.string().min(6).max(20),
-    });
-    return registerSchema.safeParse(newUser).success;
-  }
-
   async login(email: string, password: string): Promise<any> {
-    if (!(await this.checkLogin(email, password))) {
-      return null;
-    }
     const user = await this.validateUser(email, password);
     if (user) {
       const { password, ...result } = user;
@@ -62,9 +41,6 @@ export class AuthService {
   }
 
   async register(newUser: NewUserInput): Promise<any> {
-    if (!(await this.checkRegister(newUser))) {
-      return null;
-    }
     const checkUser = await this.usersService.getUserByEmail(newUser.email);
     if (checkUser) {
       return null;
