@@ -1,12 +1,7 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
-import { UsersModule } from './modules/users/users.module';
-import { PostsModule } from './modules/posts/posts.module';
-import { AuthModule } from './modules/auth/auth.module';
-import { HashModule } from './modules/hash/hash.module';
+import { UsersModule, PostsModule, AuthModule, HashModule } from './modules';
 
 @Module({
   imports: [
@@ -24,6 +19,7 @@ import { HashModule } from './modules/hash/hash.module';
       migrations: ['src/db/migrations/**/*{.ts,.js}'],
       migrationsTableName: 'migrations',
       migrationsRun: true,
+      // Only for development
       synchronize: true,
     }),
     UsersModule,
@@ -31,7 +27,5 @@ import { HashModule } from './modules/hash/hash.module';
     AuthModule,
     HashModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
 })
 export class AppModule {}

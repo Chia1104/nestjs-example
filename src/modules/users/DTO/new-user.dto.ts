@@ -1,6 +1,6 @@
 import { Length, IsEmail, IsString } from 'class-validator';
 
-export class NewUserInput {
+export class NewUserDto {
   @Length(3, 20)
   name: string;
 

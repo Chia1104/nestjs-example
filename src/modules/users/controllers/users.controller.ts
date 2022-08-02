@@ -1,5 +1,5 @@
 import { Controller, Get, NotFoundException, UseGuards } from '@nestjs/common';
-import { JwtAuthGuard } from '../../../guards/jwt-auth';
+import { JwtAuthGuard } from '../../../guards';
 import {
   ApiOperation,
   ApiResponse,

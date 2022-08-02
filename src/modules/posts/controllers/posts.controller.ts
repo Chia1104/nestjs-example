@@ -14,7 +14,7 @@ import {
   ParseUUIDPipe,
 } from '@nestjs/common';
 import { PostsService } from '../services';
-import { JwtAuthGuard } from '../../../guards/jwt-auth';
+import { JwtAuthGuard } from '../../../guards';
 import {
   ApiOperation,
   ApiResponse,
@@ -23,7 +23,7 @@ import {
   ApiBearerAuth,
 } from '@nestjs/swagger';
 import { type uuid } from '../../../util/types/uuid';
-import { NewPostInput } from '../DTO/new-post.input';
+import { NewPostDto, UpdatePostDto } from '../DTO';
 
 @Controller('posts')
 @ApiTags('Posts')
@@ -69,7 +69,7 @@ export class PostsController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiBearerAuth()
   @UsePipes(ValidationPipe)
-  async createPost(@Body() newPost: NewPostInput, @Request() req) {
+  async createPost(@Body() newPost: NewPostDto, @Request() req) {
     const user = await req.user;
     const _newPost = { ...newPost, user };
     return await this.postsService.createPost(_newPost);
@@ -92,7 +92,7 @@ export class PostsController {
       }),
     )
     id: uuid,
-    @Body() newPost: NewPostInput,
+    @Body() newPost: UpdatePostDto,
     @Request() req,
   ) {
     const user = await req.user;

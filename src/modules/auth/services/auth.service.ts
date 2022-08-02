@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from '../../users/services';
 import { HashService } from '../../hash/services';
-import { NewUserInput } from '../DTO/new-user.input';
+import { NewUserDto } from '../DTO';
 
 @Injectable()
 export class AuthService {
@@ -39,7 +39,7 @@ export class AuthService {
     return null;
   }
 
-  async register(newUser: NewUserInput): Promise<any> {
+  async register(newUser: NewUserDto): Promise<any> {
     const checkUser = await this.usersService.getUserByEmail(newUser.email);
     if (checkUser) {
       return null;

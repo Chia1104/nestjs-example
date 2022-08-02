@@ -1,7 +1,7 @@
 import { Length, IsEmail, IsEnum } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
-export class NewUserInput {
+export class NewUserDto {
   @Length(3, 20)
   @ApiProperty()
   name: string;

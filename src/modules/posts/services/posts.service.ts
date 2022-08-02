@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Post } from '../entities';
 import { Repository } from 'typeorm';
-import { NewPostInput } from '../DTO/new-post.input';
+import { NewPostDto, UpdatePostDto } from '../DTO';
 import { type uuid } from '../../../util/types/uuid';
 
 @Injectable()
@@ -27,12 +27,17 @@ export class PostsService {
       .getMany();
   }
 
-  async createPost(newPost: NewPostInput): Promise<Post> {
+  async createPost(newPost: NewPostDto): Promise<Post> {
     return this.postsRepository.save(newPost);
   }
 
-  async updatePost(id: uuid, newPost: NewPostInput): Promise<Post> {
-    return this.postsRepository.save({ id, ...newPost });
+  async updatePost(id: uuid, newPost: UpdatePostDto): Promise<void> {
+    await this.postsRepository
+      .createQueryBuilder('post')
+      .update(Post)
+      .set({ ...newPost })
+      .where('id = :id', { id })
+      .execute();
   }
 
   async deletePost(id: uuid): Promise<void> {

@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../entities';
 import { Repository } from 'typeorm';
-import { NewUserInput } from '../DTO/new-user.input';
+import { NewUserDto } from '../DTO';
 import { type uuid } from '../../../util/types/uuid';
 
 @Injectable()
@@ -29,7 +29,7 @@ export class UsersService {
       .getOne();
   }
 
-  async createUser(newUser: NewUserInput): Promise<User> {
+  async createUser(newUser: NewUserDto): Promise<User> {
     return this.usersRepository.save(newUser);
   }
 

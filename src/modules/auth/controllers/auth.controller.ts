@@ -3,7 +3,6 @@ import {
   Controller,
   Get,
   Post,
-  Query,
   Request,
   UnauthorizedException,
   UseGuards,
@@ -11,17 +10,14 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { AuthService } from '../services';
-import { JwtAuthGuard } from '../../../guards/jwt-auth';
+import { JwtAuthGuard } from '../../../guards';
 import {
   ApiBearerAuth,
   ApiOperation,
-  ApiQuery,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { NewUserInput } from '../DTO/new-user.input';
-import { CheckEmailPipe } from '../../../pipes/check-email';
-import { CheckPasswordPipe } from '../../../pipes/check-password';
+import { NewUserDto, UserLoginDto } from '../DTO';
 
 @Controller('auth')
 @ApiTags('Auth')
@@ -33,21 +29,12 @@ export class AuthController {
   @ApiResponse({ status: 200, description: 'Login' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  @ApiQuery({
-    name: 'email',
-    description: 'Email',
-    required: true,
-  })
-  @ApiQuery({
-    name: 'password',
-    description: 'Password',
-    required: true,
-  })
-  async login(
-    @Query('email', CheckEmailPipe) email: string,
-    @Query('password', CheckPasswordPipe) password: string,
-  ) {
-    const user = await this.authService.login(email, password);
+  @UsePipes(ValidationPipe)
+  async login(@Body() userLoginDto: UserLoginDto) {
+    const user = await this.authService.login(
+      userLoginDto.email,
+      userLoginDto.password,
+    );
     if (!user) throw new UnauthorizedException();
     return user;
   }
@@ -58,7 +45,7 @@ export class AuthController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @UsePipes(ValidationPipe)
-  async register(@Body() newUser: NewUserInput) {
+  async register(@Body() newUser: NewUserDto) {
     const user = await this.authService.register(newUser);
     if (!user) throw new UnauthorizedException();
     return user;
