@@ -8,6 +8,7 @@ import {
   UseGuards,
   UsePipes,
   ValidationPipe,
+  UseInterceptors,
 } from '@nestjs/common';
 import { AuthService } from '../services';
 import { JwtAuthGuard } from '../../../guards';
@@ -18,6 +19,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { NewUserDto, UserLoginDto } from '../DTO';
+import { TimeoutInterceptor } from '../../../interceptors';
 
 @Controller('auth')
 @ApiTags('Auth')
@@ -31,6 +33,7 @@ export class AuthController {
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @UsePipes(ValidationPipe)
   async login(@Body() userLoginDto: UserLoginDto) {
+    // await new Promise(r => setTimeout(r, 2000));
     const user = await this.authService.login(
       userLoginDto.email,
       userLoginDto.password,
@@ -58,6 +61,7 @@ export class AuthController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiBearerAuth()
+  @UseInterceptors(TimeoutInterceptor)
   async profile(@Request() req) {
     return await req.user;
   }

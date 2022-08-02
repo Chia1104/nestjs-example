@@ -1,4 +1,10 @@
-import { Controller, Get, NotFoundException, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  NotFoundException,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common';
 import { JwtAuthGuard } from '../../../guards';
 import {
   ApiOperation,
@@ -7,6 +13,7 @@ import {
   ApiBearerAuth,
 } from '@nestjs/swagger';
 import { UsersService } from '../services';
+import { TimeoutInterceptor } from '../../../interceptors';
 
 @Controller('users')
 @ApiTags('Users')
@@ -20,6 +27,7 @@ export class UsersController {
   @ApiResponse({ status: 200, description: 'Get all users' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 404, description: 'NotFound' })
+  @UseInterceptors(TimeoutInterceptor)
   async getAllUsers() {
     const users = await this.usersService.getAllUsers();
     if (!users || users.length === 0) throw new NotFoundException();

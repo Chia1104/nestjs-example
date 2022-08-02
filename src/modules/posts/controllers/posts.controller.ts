@@ -12,6 +12,7 @@ import {
   UsePipes,
   ValidationPipe,
   ParseUUIDPipe,
+  UseInterceptors,
 } from '@nestjs/common';
 import { PostsService } from '../services';
 import { JwtAuthGuard } from '../../../guards';
@@ -24,6 +25,7 @@ import {
 } from '@nestjs/swagger';
 import { type uuid } from '../../../util/types/uuid';
 import { NewPostDto, UpdatePostDto } from '../DTO';
+import { TimeoutInterceptor } from '../../../interceptors';
 
 @Controller('posts')
 @ApiTags('Posts')
@@ -35,6 +37,7 @@ export class PostsController {
   @ApiResponse({ status: 200, description: 'Get all posts' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 404, description: 'NotFound' })
+  @UseInterceptors(TimeoutInterceptor)
   async getAllPosts() {
     const posts = await this.postsService.getAllPosts();
     if (!posts || posts.length === 0) throw new NotFoundException();
@@ -47,6 +50,7 @@ export class PostsController {
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 404, description: 'NotFound' })
   @ApiParam({ name: 'id', description: 'Post id' })
+  @UseInterceptors(TimeoutInterceptor)
   async getPostById(
     @Param(
       'id',
