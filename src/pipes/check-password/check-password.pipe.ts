@@ -2,7 +2,7 @@ import {
   ArgumentMetadata,
   Injectable,
   PipeTransform,
-  NotAcceptableException,
+  BadRequestException,
 } from '@nestjs/common';
 import { z } from 'zod';
 
@@ -12,7 +12,7 @@ export class CheckPasswordPipe implements PipeTransform {
     const schema = z.string().min(6).max(20);
     const result = schema.safeParse(value).success;
     if (!result) {
-      throw new NotAcceptableException(
+      throw new BadRequestException(
         'Invalid password, must be between 6 and 20 characters',
       );
     }

@@ -2,7 +2,7 @@ import {
   ArgumentMetadata,
   Injectable,
   PipeTransform,
-  NotAcceptableException,
+  BadRequestException,
 } from '@nestjs/common';
 import { z } from 'zod';
 
@@ -12,7 +12,7 @@ export class CheckEmailPipe implements PipeTransform {
     const schema = z.string().email();
     const result = schema.safeParse(value).success;
     if (!result) {
-      throw new NotAcceptableException('Invalid email');
+      throw new BadRequestException('Invalid email');
     }
     return value;
   }
